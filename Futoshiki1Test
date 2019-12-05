@@ -1,0 +1,234 @@
+import org.junit.Test;
+import static org.junit.Assert.*;
+import pkg184752.FutoshikiPuzzle;
+
+/**
+ * Test file for the FutoshikiPuzzle class
+ * @author 184752
+ */
+
+public class FutoshikiPuzzleTest 
+{
+        FutoshikiPuzzle FutoshikiPuzzleTest;
+         int gridSize = 5;
+         FutoshikiPuzzle temp = new FutoshikiPuzzle(gridSize); 
+         
+    public FutoshikiPuzzleTest() 
+    {
+    }
+
+    // testing for the setSquare method    
+    @Test
+    public void SetSquareTestt()
+    {
+        int row = 1;
+        int column = 2;
+        int inputNum = 3;
+        
+        temp.setSquare(row, column, inputNum);
+        
+        assertEquals(inputNum, temp.getSquare(1, 2));
+        assertFalse("The number can not be less than 1", inputNum < 1);
+        assertFalse("The number cannot be bigger than the grid size", 
+                inputNum > gridSize);
+    }
+    
+    @Test
+    public void SetSquareTestt2()
+    {
+        int row = 1;
+        int column = 2;
+        int inputNum = 6;
+        
+        temp.setSquare(row, column, inputNum);
+        
+        assertEquals(inputNum, temp.getSquare(1, 2));
+        assertFalse("The number can not be less than 1", inputNum < 1);
+        assertFalse("The number cannot be bigger than the grid size", 
+                inputNum > gridSize);
+    }
+    
+    @Test
+    public void SetSquareTestt3()
+    {
+        int row = 1;
+        int column = 2;
+        int inputNum = 0;
+        
+        temp.setSquare(row, column, inputNum);
+        
+        assertEquals(inputNum, temp.getSquare(1, 2));
+        assertFalse("The number can not be less than 1", inputNum < 1);
+        assertFalse("The number cannot be bigger than the grid size", 
+                inputNum > gridSize);
+    }
+    
+    // testing for the setColumnConstraints method
+    @Test
+    public void setColConstraintsTest()
+    {
+        int row = 3;
+        int column = 2;
+        String constraint = "^";
+        temp.setColumnConstraint(row, column, constraint);
+        assertEquals("^", temp.getColumnConstraint(row, column));
+    } 
+    
+    @Test
+    public void setColConstraintsTest2()
+    {
+        int row = 3;
+        int column = 2;
+        String constraint = "v";
+        temp.setColumnConstraint(row, column, constraint);
+        assertEquals("v", temp.getColumnConstraint(row, column));
+    }
+    
+    
+   @Test
+   public void setColConstraintTest3()
+   {
+       int row = 3;
+       int column = 2;
+       String constraint = null;
+       temp.setColumnConstraint(row, column, constraint);
+       assertFalse("This is not a valid constraint", constraint == null);
+   }
+   
+   // testing for the setRowConstraints method
+    @Test
+    public void setRowConstraintsTest() 
+    {
+        int row = 2;
+        int column = 3;
+        String constraint = "<";
+        temp.setRowConstraint(row, column, constraint);
+        assertEquals("<", temp.getRowConstraint(2, 3));
+    }
+
+    @Test
+    public void setRowConstraintsTest2() {
+        int row = 2;
+        int column = 3;
+        String constraint = ">";
+        temp.setRowConstraint(row, column, constraint);
+        assertEquals(">", temp.getRowConstraint(2, 3));
+    }
+    
+     @Test
+    public void setRowConstraintsTest3() {
+        int row = 2;
+        int column = 3;
+        String constraint = null;
+        temp.setRowConstraint(row, column, constraint);
+        assertFalse("This is not a valid constraint", constraint == null);
+    }
+
+    // testing for the fillPuzzle method
+
+    @Test
+    public void FillPuzzleTest() 
+    {
+        int expCount = 10;
+        int count = 0;
+        temp.fillPuzzle(expCount);
+
+        int gridSize = 5;
+        for (int y = 0; y < gridSize; y++) 
+        {
+            for (int x = 0; x < gridSize; x++) 
+            {
+                if (temp.getSquare(x, y) > 0) 
+                {
+                    count ++;
+                }
+                if (x < gridSize - 1 && temp.getRowConstraint(x, y) != null) 
+                {
+                    count ++;
+                }
+                if (y < gridSize - 1 && temp.getColumnConstraint(x, y) != null) 
+                {
+                    count ++;
+                }
+            }
+        }
+        assertEquals(expCount, count);
+    }
+    
+    
+    @Test
+    public void FillPuzzleTest2()
+    {
+        int symbolsToPlace = 0;
+        temp.fillPuzzle(symbolsToPlace);
+        assertFalse("You must place symbols!", symbolsToPlace <= 0);
+    }
+    
+    @Test
+    public void FillPuzzleTest3()
+    {
+        int symbolsToPlace = -1;
+        temp.fillPuzzle(symbolsToPlace);
+        assertFalse("You must place symbols!", symbolsToPlace <= 0);
+    }
+    
+    @Test
+    public void FillPuzzleTest4()
+    {
+        int symbolsToPlace = 11;
+        temp.fillPuzzle(symbolsToPlace);
+        assertFalse("Too many symbols!", symbolsToPlace > 10);
+    }
+    
+    // testing for the displayGrid method
+    @Test
+    public void DisplayGridTest() 
+    {
+        temp.fillPuzzle(5);
+        String output = temp.displayGrid();
+        System.out.println(output);
+    }
+    
+    @Test
+    public void DisplayGridTest2() 
+    {
+        temp.setColumnConstraint(1, 2, "^");
+        temp.setRowConstraint(3, 2, "<");
+        temp.setSquare(1, 4, 2);
+        System.out.println(temp.displayGrid());
+        String output = temp.displayGrid();
+        String expOutput = 
+                "--- --- --- --- --- "+
+                "| | | | | | | | | |"+
+                "--- --- --- --- --- "+
+                "                    "+
+                "--- --- --- --- --- "+
+                "| | | | | | | | |2|"+
+                "--- --- --- --- --- "+
+                "         ^          "+
+                "--- --- --- --- --- "+
+                "| | | | | | | | | |"+
+                "--- --- --- --- --- "+
+                "                    "+
+                "--- --- --- --- --- "+
+                "| | | | | |<| | | |"+
+                "--- --- --- --- --- "+
+                "                    "+
+                "--- --- --- --- --- "+
+                "| | | | | | | | | |"+
+                "--- --- --- --- --- ";
+        assertEquals(expOutput, output);
+    }
+    
+    @Test
+    public void DisplayGridTest3() 
+    {
+        temp.fillPuzzle(9);
+        String output = temp.displayGrid();
+        System.out.println(output);
+    }
+    
+    
+}
+
+
